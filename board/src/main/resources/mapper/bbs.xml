@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.board.bbs.BbsDAO">
+
+<resultMap type="com.study.board.bbs.BbsTblVO" id="bbsMap">
+    <result property="rowNum"       column="RN"/>
+    <result property="userId"       column="USERID"/>
+    <result property="seq"          column="SEQ"/>
+    <result property="title"        column="TITLE"/>
+    <result property="content"      column="CONTENT"/>
+    <result property="divi"         column="DIVI"/>
+    <result property="regDate"      column="REGDATE"/>
+</resultMap>
+
+<select id="selectBbsRowCount" resultType="integer">
+    SELECT COUNT(*) FROM BBS_TBL
+</select>
+
+<select id="selectBbsList" resultMap="bbsMap">
+    SELECT * FROM (SELECT ROWNUM RN, BBS_TBL.* FROM BBS_TBL) 
+    WHERE RN <![CDATA[>=]]> (#{page} * #{rowsPerPage}) + 1 AND 
+          RN <![CDATA[<=]]> (#{page} + 1) * #{rowsPerPage}
+</select>
+
+<select id="selectBbsContent" resultMap="bbsMap">
+    SELECT * FROM BBS_TBL WHERE USERID=#{userId} AND SEQ=#{seq}
+</select>
+
+<update id="updateBbsContent">
+    UPDATE BBS_TBL SET TITLE=#{title}, CONTENT=#{content} WHERE USERID=#{userId} AND SEQ=#{seq}
+</update>
+
+<insert id="insertBbsContent">
+    INSERT INTO BBS_TBL(USERID, SEQ, TITLE, CONTENT, REGDATE, DIVI) VALUES
+    (#{userId}, (SELECT NVL(MAX(SEQ), 0)+1 AS SEQ FROM BBS_TBL WHERE USERID=#{userId}), #{title}, #{content}, SYSDATE, #{divi})
+</insert>
+
+
+</mapper>
