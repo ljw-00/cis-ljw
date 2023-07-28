@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : 해당 mapper를 사용하는 DAO 정보 입력 -->
+<mapper namespace="com.example.demo.borrow.BorrowDAO">
+
+    <resultMap type="com.example.demo.borrow.BorrowTblVO" id="borrowMap">
+        <result property="isbn"       column="ISBN" />
+        <result property="title"      column="TITLE" />
+        <result property="userId"     column="USERID" />
+        <result property="brDate"     column="BRDATE" />
+        <result property="rtDate"     column="RTDATE" />
+        <result property="brStatus"   column="BRSTATUS" />
+    </resultMap>
+
+    <select id="selectBorrowData" resultMap="borrowMap">
+        SELECT * FROM BORROW_TBL WHERE ISBN=#{isbn}
+    </select>
+
+    <select id="getBookCount" resultType="Integer">
+        SELECT NVL(COUNT(*), 0) FROM BORROW_TBL WHERE USERID=#{userId} AND BRSTATUS=#{brStatus}
+    </select>
+
+    <insert id="insertOneBorrow">
+        INSERT INTO BORROW_TBL(ISBN, TITLE, USERID, BRDATE, RTDATE, BRSTATUS) VALUES
+        (#{isbn}, #{title}, #{userId}, SYSDATE, (SYSDATE + 10), #{brStatus})
+    </insert>
+
+    <update id="updateBrStatus">
+        UPDATE BORROW_TBL SET BRSTATUS=#{brStatus} WHERE ISBN=#{isbn}
+    </update>
+    
+    <delete id="deleteOneBorrow">
+        DELETE FROM BORROW_TBL WHERE ISBN=#{isbn} AND BRSTATUS = #{brStatus}
+    </delete>
+    
+</mapper>

@@ -39,7 +39,6 @@
         padding: 20px 0;
         border-bottom: 1px solid #dedede;
         height: 180px;
-        border: 1px solid red;
     }
     #thumbnail {
         float: left;
@@ -49,6 +48,7 @@
         width: 87%;
         float: right; 
         margin-left: 3%;
+        letter-spacing: -1px;
     }
     #title {
         font-size: 120%;
@@ -63,6 +63,24 @@
     #desc {
         color: #666;
         font-size: 90%;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* 라인수 */
+        height: 2.8em; /* 라인수에 맞춰 길이 정해줘야함 */
+        -webkit-box-orient: vertical;
+        /* word-wrap:break-word; */
+        line-height: 1.2em;
+        padding: 3px 0;
+    }
+    #meta {
+        padding-top: 10px;
+        color: #666;
+        font-size: 90%;
+    }
+    #meta span {
+        color: #888;
     }
 </style>
 </head>
@@ -78,14 +96,16 @@
                 <tr>
                     <td>
                         <div id="thumbnail">
-                            <a href="#">
+                            <a href="/book/bookinfo?title=${book.title}&isbn=${book.isbn}&image=${book.image}
+                            &author=${book.author}&publisher=${book.publisher}&pubdate=${book.pubdate}&description=${book.description}">
                                 <img src="${book.image}" alt="${book.title}" style="width:100px;">
                             </a>
                         </div>
                         <div id="list-body">
                             <div id="flexbox">
                                 <!-- 책제목 -->
-                                <a href="#" id="title">${book.title}</a>
+                                <a href="/book/bookinfo?title=${book.title}&isbn=${book.isbn}&image=${book.image}
+                                        &author=${book.author}&publisher=${book.publisher}&pubdate=${book.pubdate}&description=${book.description}" id="title">${book.title}</a>
                                 <!-- 작가, 출판사, 출간일 -->
                                 <div id="app">
                                     <span>${book.author}</span>
@@ -101,6 +121,7 @@
                             <div id="meta">
                                 <label>대출가능여부: </label>
                                 <span>대출가능</span>
+                                <span class="bar">&nbsp;</span>
                                 <label>예약가능여부: </label>
                                 <span>예약불가</span>
                             </div>
@@ -115,6 +136,7 @@
 
     const txtSearch = document.querySelector('#txtSearch');
     const btnSearch = document.querySelector('#btnSearch');
+    const title = document.querySelector('#title');
     
     btnSearch.addEventListener('click', ()=>{
         let queryString = "?text=" + txtSearch.value;

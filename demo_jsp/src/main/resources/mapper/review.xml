@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : 해당 mapper를 사용하는 DAO 정보 입력 -->
+<mapper namespace="com.example.demo.review.ReviewDAO">
+
+    <resultMap type="com.example.demo.review.ReviewTblVO" id="reviewMap">
+        <result property="regDate"    column="REGDATE" />
+        <result property="userId"     column="USERID" />
+        <result property="review"     column="REVIEW" />
+        <result property="isbn"       column="ISBN" />
+    </resultMap>
+
+    <select id="selectReview" resultMap="reviewMap">
+        SELECT * FROM REVIEW_TBL WHERE ISBN=#{isbn} 
+    </select>
+
+    <select id="selectOneReviewById" resultMap="reviewMap">
+        SELECT * FROM REVIEW_TBL WHERE ISBN=#{isbn} AND USERID=#{userId}
+    </select>
+
+    <insert id="insertOneReview">
+        INSERT INTO REVIEW_TBL(REGDATE, USERID, REVIEW, ISBN) VALUES
+        (SYSDATE, #{userId}, #{review}, #{isbn})
+    </insert>
+
+    
+</mapper>
