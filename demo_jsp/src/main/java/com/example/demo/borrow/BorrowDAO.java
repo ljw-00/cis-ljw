@@ -4,6 +4,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.reserve.ReserveTblVO;
+
 @Repository
 public class BorrowDAO {
 
@@ -15,7 +17,7 @@ public class BorrowDAO {
         return sqlSessionTemplate.insert("insertOneBorrow", vo);
     }
 
-    public BorrowTblVO selectBorrowData(BorrowTblVO vo) throws Exception
+    public Integer selectBorrowData(BorrowTblVO vo) throws Exception
     {
         return sqlSessionTemplate.selectOne("selectBorrowData", vo);
     }
@@ -33,6 +35,16 @@ public class BorrowDAO {
     public int updateBrStatus(BorrowTblVO vo) throws Exception
     {
         return sqlSessionTemplate.update("updateBrStatus", vo);
+    }
+
+    public Integer selectBorrowCount(ReserveTblVO vo) throws Exception
+    {
+        return sqlSessionTemplate.selectOne("selectBorrowCount", vo);
+    }
+
+    public BorrowTblVO checkBorrowUser(BorrowTblVO vo) throws Exception
+    {
+        return sqlSessionTemplate.selectOne("checkBorrowUser", vo);
     }
     
 }

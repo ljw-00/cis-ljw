@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.reserve.ReserveDAO;
+import com.example.demo.reserve.ReserveTblVO;
 import com.example.demo.review.ReviewDAO;
 import com.example.demo.review.ReviewTblVO;
 
@@ -19,51 +21,48 @@ public class BorrowController {
     @Autowired
     ReviewDAO reviewDAO;
 
+    @Autowired
+    ReserveDAO reserveDAO;
+
     @PostMapping("/borrowBook")
     @ResponseBody
     public String borrowBook(@RequestBody BorrowTblVO vo, Model model) throws Exception
     {
-        // 만약 사용자가 5권 이상 대출중이라면 return
-        int borrowNum = borrowDAO.getBookCount(vo);
-
+        // 이미 5권 이상 대출 중인 유저 = return $MAX;
+        Integer borrowNum = borrowDAO.getBookCount(vo);
         if (borrowNum == 5)
         {
             return "$MAX";
         }
-
-        // borrow 테이블에 존재하는지 확인
-        // 존재한다면 BRSTATUS가 T(대출중)인지 F(대출가능)인지 확인
-        BorrowTblVO resultVO = borrowDAO.selectBorrowData(vo);
-
-        // borrow 테이블에 도서가 존재하는 경우
-        if (resultVO != null)
-        {
-            // 1. 대출 가능 상태 : 대출 가능
-            if (resultVO.getBrStatus() == "T")
-            {
-                int resultCount = borrowDAO.insertOneBorrow(vo);
         
-                if (resultCount == 1)
-                {
-                    return "OK";
-                }
-                else
-                {
-                    return "$FAIL";
-                }
-            }
-            // 2. 이미 대출 중인 책 : 대출 불가능
-            else
-            {
-                return "$ALREADY";
-            }
+        int resultCount = borrowDAO.insertOneBorrow(vo);
+        if (resultCount == 1)
+        {
+            return "OK";
         }
-        // borrow 테이블에 도서 존재하지 않는 경우
         else
         {
-            int resultCount = borrowDAO.insertOneBorrow(vo);
-        
-            if (resultCount == 1)
+            return "$FAIL";
+        }
+    }
+
+    // 반납
+    @PostMapping("/returnBook")
+    @ResponseBody
+    public String returnBook(@RequestBody BorrowTblVO brVO) throws Exception
+    {
+        // 반납하려는 도서의 isbn으로 예약 테이블을 조회해서 가져온 목록 중 
+        // 가장 작은 SEQ 값에 해당하는 유저 정보를 reserveTblVO에 저장
+        ReserveTblVO rsVO = new ReserveTblVO();
+        rsVO.setIsbn(brVO.getIsbn());
+        ReserveTblVO reserveTblVO = reserveDAO.selectOneReserveUser(rsVO);
+
+        // 예약 없다면 바로 삭제
+        if (reserveTblVO == null)
+        {
+            int deleteCount = borrowDAO.deleteOneBorrow(brVO);
+            
+            if (deleteCount == 1)
             {
                 return "OK";
             }
@@ -72,38 +71,11 @@ public class BorrowController {
                 return "$FAIL";
             }
         }
-    }
-
-    // 반납
-    @PostMapping("/returnBook")
-    @ResponseBody
-    public String returnBook(@RequestBody BorrowTblVO vo) throws Exception
-    {
-        int updateVO = borrowDAO.updateBrStatus(vo);
-        
-        if (updateVO == 1)
+        // 예약 존재하는 경우
+        else
         {
-            // borrow 테이블에 존재하는지 확인
-            // 존재한다면 BRSTATUS가 T(대출중)인지 F(반납)인지 확인
-            BorrowTblVO resultVO = borrowDAO.selectBorrowData(vo);
-            System.out.println(resultVO);
 
-            if (resultVO != null)
-            {
-                if (resultVO.getBrStatus().equals("T"))
-                {
-                    int resultCount = borrowDAO.deleteOneBorrow(vo);
-                    if (resultCount == 1)
-                    {
-                        return "OK";
-                    }
-                    else
-                    {
-                        return "$FAIL";
-                    }
-                }
-            }
-        }
+        }        
         
 
         return "$FAIL";

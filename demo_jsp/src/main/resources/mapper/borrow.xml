@@ -4,33 +4,45 @@
 <mapper namespace="com.example.demo.borrow.BorrowDAO">
 
     <resultMap type="com.example.demo.borrow.BorrowTblVO" id="borrowMap">
+        <result property="brCode"     column="BRCODE" />
         <result property="isbn"       column="ISBN" />
         <result property="title"      column="TITLE" />
         <result property="userId"     column="USERID" />
         <result property="brDate"     column="BRDATE" />
-        <result property="rtDate"     column="RTDATE" />
-        <result property="brStatus"   column="BRSTATUS" />
+        <result property="dueDate"    column="DUEDATE" />
+        <result property="renew"      column="RENEW" />
     </resultMap>
 
-    <select id="selectBorrowData" resultMap="borrowMap">
-        SELECT * FROM BORROW_TBL WHERE ISBN=#{isbn}
-    </select>
-
     <select id="getBookCount" resultType="Integer">
-        SELECT NVL(COUNT(*), 0) FROM BORROW_TBL WHERE USERID=#{userId} AND BRSTATUS=#{brStatus}
+        SELECT NVL(COUNT(*), 0) FROM BORROW_TBL WHERE USERID=#{userId}
     </select>
 
     <insert id="insertOneBorrow">
-        INSERT INTO BORROW_TBL(ISBN, TITLE, USERID, BRDATE, RTDATE, BRSTATUS) VALUES
-        (#{isbn}, #{title}, #{userId}, SYSDATE, (SYSDATE + 10), #{brStatus})
+        INSERT INTO BORROW_TBL(BRCODE, ISBN, TITLE, USERID, BRDATE, DUEDATE, RENEW) VALUES
+        (#{brCode}, #{isbn}, #{title}, #{userId}, SYSDATE, (SYSDATE + 10), #{renew})
     </insert>
 
+    <select id="checkBorrowUser" resultMap="borrowMap">
+        SELECT * FROM BORROW_TBL WHERE ISBN=#{isbn} AND USERID=#{userId}
+    </select>
+
+    <delete id="deleteOneBorrow">
+        DELETE FROM BORROW_TBL WHERE ISBN=#{isbn} AND USERID=#{userId}
+    </delete>
+
+    <select id="selectBorrowData" resultType="Integer">
+        SELECT NVL(COUNT(*), 0) FROM BORROW_TBL WHERE ISBN=#{isbn}
+    </select>
+
+
     <update id="updateBrStatus">
-        UPDATE BORROW_TBL SET BRSTATUS=#{brStatus} WHERE ISBN=#{isbn}
+        UPDATE BORROW_TBL SET  WHERE ISBN=#{isbn}
     </update>
     
-    <delete id="deleteOneBorrow">
-        DELETE FROM BORROW_TBL WHERE ISBN=#{isbn} AND BRSTATUS = #{brStatus}
-    </delete>
+
+
+    <select id="selectBorrowCount" resultType="Integer">
+        SELECT NVL(COUNT(*), 0) FROM BORROW_TBL WHERE ISBN = #{isbn}
+    </select>
     
 </mapper>

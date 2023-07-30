@@ -12,6 +12,7 @@
         <span id="spnWelcome"></span>
         <button type="button" id="btnLogin"></button>
         <button type="button" id="btnMyPage">마이페이지</button>
+        <button type="button" id="btnBooklist">도서 검색</button>
     </div>
 
 <script src="/JS/jquery-3.7.0.min.js"></script>
@@ -25,6 +26,8 @@
     const btns = document.querySelectorAll('.btns');
     const btnLogin = document.querySelector('#btnLogin');
     const btnMyPage = document.querySelector('#btnMyPage');
+
+    const btnBooklist = document.querySelector('#btnBooklist');
 
 
     //////////////////////////////////////////////////////////
@@ -100,6 +103,10 @@
     btnMyPage.addEventListener('click', ()=>{
         location.href = '/mypage';
     });
+
+    btnBooklist.addEventListener('click', ()=>{
+        location.href = '/book/booklist';
+    })
 
 
     //////////////////////////////////////////////////////////

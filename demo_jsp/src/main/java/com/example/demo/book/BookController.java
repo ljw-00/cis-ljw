@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.example.demo.borrow.BorrowDAO;
+import com.example.demo.borrow.BorrowTblVO;
 import com.example.demo.common.SessionUtil;
+import com.example.demo.reserve.ReserveDAO;
+import com.example.demo.reserve.ReserveTblVO;
 import com.example.demo.review.ReviewDAO;
 import com.example.demo.review.ReviewTblVO;
 import com.example.demo.user.UserTblVO;
@@ -29,6 +33,12 @@ public class BookController {
 
     @Autowired
     ReviewDAO reviewDAO;
+
+    @Autowired
+    BorrowDAO borrowDAO;
+
+    @Autowired
+    ReserveDAO reserveDAO;
 
     @GetMapping("/book/booklist")
     public String bookList(String text, Model model)    
@@ -84,25 +94,52 @@ public class BookController {
 	}
 
     @GetMapping("/book/bookinfo")
-    public String bookInfo(@ModelAttribute("BookVO") BookVO vo, @ModelAttribute("ReviewTblVO") ReviewTblVO reviewVO, Model model) throws Exception
+    public String bookInfo(@ModelAttribute("BookVO") BookVO vo, @ModelAttribute("ReviewTblVO") ReviewTblVO reviewVO,
+                           @ModelAttribute("BorrowVO") BorrowTblVO brVO, @ModelAttribute("ReserveTblVO") ReserveTblVO rsVO, Model model) throws Exception
     {
 
         model.addAttribute("books", vo);
 
         UserTblVO userTblVO = (UserTblVO)SessionUtil.getAttribute("USER");
-        
+
         if (userTblVO != null)
         {
             model.addAttribute("vo", userTblVO);
+
+            // 유저가 대출한 상태인지 확인
+            brVO.setUserId(userTblVO.getUserId());
+            BorrowTblVO brTblVO = borrowDAO.checkBorrowUser(brVO);
+
+            if (brTblVO != null)
+            {
+                model.addAttribute("brData", brTblVO);
+            }
+
+            // 유저가 예약한 책인지 확인
+            rsVO.setUserId(userTblVO.getUserId());
+            ReserveTblVO rsTblVO = reserveDAO.checkReserveUser(rsVO);
+
+            if (rsTblVO != null)
+            {
+                model.addAttribute("rsData", rsTblVO);
+            }
+
         }
 
         // 게시물 서평 정보 전송
         List<ReviewTblVO> list = reviewDAO.selectReview(reviewVO);
-        
         if (list != null)
         {
             model.addAttribute("review", list);
         }
+
+        // 대출 인원 수 전송
+        Integer borrowNum = borrowDAO.selectBorrowData(brVO);
+        model.addAttribute("brNum", borrowNum);
+
+        // 예약 인원 수 전송
+        Integer reserveNum = reserveDAO.selectReserveNum(rsVO);
+        model.addAttribute("rsNum", reserveNum);
 
         return "book/bookinfo";
     }

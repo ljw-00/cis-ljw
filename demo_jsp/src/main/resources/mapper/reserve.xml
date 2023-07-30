@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : 해당 mapper를 사용하는 DAO 정보 입력 -->
+<mapper namespace="com.example.demo.reserve.ReserveDAO">
+
+    <resultMap type="com.example.demo.reserve.ReserveTblVO" id="reserveMap">
+        <result property="brCode"     column="BRCODE" />
+        <result property="seq"        column="SEQ" />
+        <result property="userId"     column="USERID" />
+        <result property="isbn"       column="ISBN" />
+        <result property="rsDate"     column="RSDATE" />
+    </resultMap>
+
+    <insert id="insertOneReserve">
+        INSERT INTO RESERVE_TBL(BRCODE, SEQ, USERID, ISBN, RSDATE) VALUES
+        (#{brCode}, (SELECT NVL(MAX(SEQ), 0)+1 AS SEQ FROM RESERVE_TBL WHERE ISBN=#{isbn}), #{userId}, #{isbn}, SYSDATE)
+    </insert>
+
+    <select id="selectReserveCount" resultType="Integer">
+        SELECT NVL(COUNT(*), 0) FROM RESERVE_TBL WHERE ISBN=#{isbn}
+    </select>
+
+    <select id="selectReserveNum" resultType="Integer">
+        SELECT NVL(COUNT(*), 0) FROM RESERVE_TBL WHERE ISBN=#{isbn}
+    </select>
+
+    <select id="checkReserveUser" resultMap="reserveMap">
+        SELECT * FROM RESERVE_TBL WHERE ISBN=#{isbn} AND USERID=#{userId}
+    </select>
+
+    <delete id="deleteOneReserve">
+        DELETE FROM RESERVE_TBL WHERE USERID=#{userId} AND ISBN=#{isbn}
+    </delete>
+
+    <select id="selectOneReserveUser" resultMap="reserveMap">
+        SELECT * FROM (
+            SELECT * FROM RESERVE_TBL WHERE ISBN=#{isbn} ORDER BY SEQ ASC
+        ) WHERE ROWNUM = 1
+    </select>
+
+    
+</mapper>

@@ -108,13 +108,19 @@
                     <div class="summary-container">
                         <span id="summary-title">${books.title}</span><hr>
                         <span class="summary-etc">저자 : ${books.author} | 출판사 : ${books.publisher} | 출간일 : ${books.pubdate}</span>
-                        <!-- 요약 정보 -->
+                        <!-- 요약 정보 --> <br><hr><br>
+                        <span>대출 : ${brNum} / 5 | 예약 : ${rsNum} / 5</span>
+                        <span></span>
+                        <br>
+                        <hr>
+                        <br>
+                        <button type="button" class="btn btn-success" id="btnBorrow"></button>
+                        <button type="button" class="btn btn-warning" id="btnReserve">예약하기</button>
+                        <button type="button" class="btn btn-secondary" id="btnReturn">반납하기</button>
                     </div>
                 </div>
                 <!-- 대출 & 예약버튼 -->
-                <button type="button" class="btn btn-success" id="btnBorrow">대출하기</button>
-                <button type="button" class="btn btn-warning" id="btnReserve">예약하기</button>
-                <button type="button" class="btn btn-secondary" id="btnReturn">반납하기</button>
+
                 <div>
 
                 </div>
@@ -234,13 +240,50 @@
         }
     }
 
-    const checkBorrowStatus = function()
+    // 대출 / 예약 / 반납 버튼 세팅
+    const setBtnStatus = function()
     {
-        // 유저가 현재 대출 중인지
-        // 아니면 다른 사람이 대출 중인지
+
+        // 이미 대출 중인 유저 : 반납하기
+        if (('${brData}' != null) && ('${brData}' != ""))
+        {
+            btnBorrow.style.display = 'none';
+            btnReserve.style.display = 'none';
+            btnReturn.style.display = 'inline'
+            return;
+        }
+
+        // 예약 중인 유저 : 예약 취소
+        if (('${rsData}' != null) && ('${rsData}' != ""))
+        {
+            btnBorrow.style.display = 'none';
+            btnReserve.style.display = 'inline';
+            btnReserve.textContent = '예약 취소';
+            btnReturn.style.display = 'none'
+            return;            
+        }
+
+        // 현재 모든 책이 대출 중 > 예약버튼만 보이도록
+        if ('${brNum}' == 5)
+        {
+            btnBorrow.style.display = 'none';
+            btnReserve.style.display = 'inline';
+            btnReserve.textContent = '예약하기';
+            btnReturn.style.display = 'none'
+            return;
+        }
+        // 대출 가능한 책일 경우
+        else
+        {
+            btnBorrow.style.display = 'inline';
+            btnBorrow.textContent = '대출하기';
+            btnReserve.style.display = 'none';
+            btnReturn.style.display = 'none'
+            return;
+        }
     }
 
-    const checkReserveStatus = function()
+    const setBtn = function()
     {
         // 유저가 현재 예약 중인지
         // 아니면 다른 사람이 예약 중인지
@@ -253,7 +296,7 @@
         // 로그인 상태일 시 로그아웃
         if (sessionState == true)
         {
-            location.href = '/book/bookinfo/logout';
+            location.href = '/logout';
         }
         // 로그아웃 상태일 시 로그인
         else
@@ -270,51 +313,75 @@
             return;
         }
 
-        let httpRequest = new XMLHttpRequest();
-        httpRequest.open('POST', '/borrowBook', true);
-        httpRequest.setRequestHeader('content-type', 'application/json');
-            
-        // httpRequest의 상태가 바뀌었을 때 콜백함수 호출
-        httpRequest.onreadystatechange = function()
+        if ('${brData}' != null && ('${brData}' != ""))
         {
-            if(httpRequest.readyState !== XMLHttpRequest.DONE)
-                return;
+            alert("이미 대출 중인 책입니다.");
+            return;
+        }
 
-            if (httpRequest.status === 200)
+        if ('${brNum}' == 5)
+        {
+            alert("모든 책이 대출 중입니다.");
+            return;
+        }
+
+        if (confirm("${books.title}을(를) 대출하시겠습니까?"))
+        {
+            let httpRequest = new XMLHttpRequest();
+            httpRequest.open('POST', '/borrowBook', true);
+            httpRequest.setRequestHeader('content-type', 'application/json');
+                
+            // httpRequest의 상태가 바뀌었을 때 콜백함수 호출
+            httpRequest.onreadystatechange = function()
             {
-                let result = httpRequest.responseText;
+                if(httpRequest.readyState !== XMLHttpRequest.DONE)
+                    return;
+    
+                if (httpRequest.status === 200)
+                {
+                    let result = httpRequest.responseText;
+    
+                    if (result == "OK")
+                    {
+                        btnBorrow.style.display = 'none';
+                        btnReserve.style.display = 'none';
+                        btnReturn.style.display = 'inline'
 
-                if (result == "OK")
-                {
-                    alert("대출에 성공하였습니다.");
-                }
-                else if (result == "$MAX")
-                {
-                    alert("대출 가능한 최대 권수를 초과하였습니다.");
-                }
-                else if (result == "$ALREADY")
-                {
-                    alert("이미 대출중인 도서입니다.");
+                        if(confirm("대출되었습니다. 마이페이지에서 확인하시겠습니까?"))
+                        {
+                            location.href = '/mypage';
+                        }
+
+                    }
+                    else if (result == "$MAX")
+                    {
+                        alert("대출 가능한 최대 권수를 초과하였습니다.");
+                    }
+                    else
+                    {
+                        alert("대출에 실패하였습니다.");
+                    }
                 }
                 else
                 {
-                    alert("대출에 실패하였습니다.");
+                    console.error(httpRequest.status, httpRequest.statusText);
                 }
             }
-            else
-            {
-                console.error(httpRequest.status, httpRequest.statusText);
+    
+            let requestData = {
+                brCode : '${books.isbn}' + "-" + "${vo.userId}",
+                isbn : '${books.isbn}',
+                title : '${books.title}',
+                userId : '${vo.userId}',
+                renew : "F"
             }
+    
+            httpRequest.send(JSON.stringify(requestData));
         }
-
-        let requestData = {
-            isbn : '${books.isbn}',
-            title : '${books.title}',
-            userId : '${vo.userId}',
-            brStatus : "T"
+        else
+        {
+            return;
         }
-
-        httpRequest.send(JSON.stringify(requestData));
     })
 
     // 반납
@@ -357,9 +424,7 @@
 
         let requestData = {
             isbn : '${books.isbn}',
-            title : '${books.title}',
             userId : '${vo.userId}',
-            brStatus : 'T'
         }
 
         httpRequest.send(JSON.stringify(requestData));
@@ -368,7 +433,114 @@
 
     // 예약
     btnReserve.addEventListener('click', ()=>{
+        
+        if (sessionState == false)
+        {
+            alert("로그인 후 이용 가능합니다.");
+            return;
+        }
 
+        // 예약 취소
+        if (('${rsData}' != null) && ('${rsData}' != ""))
+        {
+            if (confirm("${books.title}을(를) 예약취소 하시겠습니까?"))
+            {
+                let httpRequest = new XMLHttpRequest();
+                httpRequest.open('POST', '/cancelReservation', true);
+                httpRequest.setRequestHeader('content-type', 'application/json');
+                    
+                // httpRequest의 상태가 바뀌었을 때 콜백함수 호출
+                httpRequest.onreadystatechange = function()
+                {
+                    if(httpRequest.readyState !== XMLHttpRequest.DONE)
+                        return;
+        
+                    if (httpRequest.status === 200)
+                    {
+                        let result = httpRequest.responseText;
+        
+                        if (result === "OK")
+                        {
+                            alert("예약이 취소되었습니다. 감사합니다.");
+                            btnBorrow.style.display = 'none';
+                            btnReserve.style.display = 'inline';
+                            btnReserve.textContent = '예약하기';
+                            btnReturn.style.display = 'none'
+                        }
+                        else
+                        {
+                            alert("예약취소에 실패하였습니다.");
+                        }
+                    }
+                    else
+                    {
+                        console.error(httpRequest.status, httpRequest.statusText);
+                    }
+                }
+        
+                let requestData = {
+                    userId : '${vo.userId}',
+                    isbn : '${books.isbn}'
+                }
+        
+                httpRequest.send(JSON.stringify(requestData));
+            }
+        }
+        // 예약하기
+        else
+        {
+            if (confirm("${books.title}을(를) 예약하시겠습니까?"))
+            {
+                let httpRequest = new XMLHttpRequest();
+                httpRequest.open('POST', '/reserveBook', true);
+                httpRequest.setRequestHeader('content-type', 'application/json');
+                    
+                // httpRequest의 상태가 바뀌었을 때 콜백함수 호출
+                httpRequest.onreadystatechange = function()
+                {
+                    if(httpRequest.readyState !== XMLHttpRequest.DONE)
+                        return;
+        
+                    if (httpRequest.status === 200)
+                    {
+                        let result = httpRequest.responseText;
+        
+                        if (result === "OK")
+                        {
+                            btnBorrow.style.display = 'none';
+                            btnReserve.style.display = 'inline';
+                            btnReserve.textContent = '예약 취소';
+                            btnReturn.style.display = 'none'
+
+                            if (confirm("예약되었습니다. 내 서재에서 확인하시겠습니까?"))
+                            {
+                                location.href = '/main';
+                            }
+                        }
+                        else if (result === "$MAX")
+                        {
+                            alert("예약 가능 인원이 초과하여 예약이 불가능합니다.");
+                        }
+                        else
+                        {
+                            alert("예약에 실패하였습니다.");
+                        }
+                    }
+                    else
+                    {
+                        console.error(httpRequest.status, httpRequest.statusText);
+                    }
+                }
+        
+                let requestData = {
+                    brCode : '${books.isbn}' + '-' + '${vo.userId}',
+                    userId : '${vo.userId}',
+                    isbn : '${books.isbn}'
+                }
+        
+                httpRequest.send(JSON.stringify(requestData));
+            }
+        }
     })
 
     btnReview.addEventListener('click', ()=>{
@@ -432,7 +604,7 @@
     setsessionState();      // 세션이 있는지 없는지 상태값을 저장
     setWelcomeMsg();        // 웰컴 메세지 설정
     setLoginButton();       // 로그인-로그아웃 버튼 설정
-
+    setBtnStatus();
 
         
 })(); 
