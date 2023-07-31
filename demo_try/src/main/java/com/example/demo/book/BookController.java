@@ -1,11 +1,16 @@
 package com.example.demo.book;
 
+import java.io.StringReader;
 import java.net.URI;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -64,7 +70,7 @@ public class BookController {
         		  .build()
         		  .toUri();
         		  
-        // Spring 요청 제공 클래스 
+        // Spring에서 HTTP 요청을 나타내는 클래스 : RequestEntity 
         RequestEntity<Void> req = RequestEntity
         						 .get(uri)
         						 .header("X-Naver-Client-Id", clientId)
@@ -95,10 +101,58 @@ public class BookController {
 
     @GetMapping("/book/bookinfo")
     public String bookInfo(@ModelAttribute("BookVO") BookVO vo, @ModelAttribute("ReviewTblVO") ReviewTblVO reviewVO,
-                           @ModelAttribute("BorrowVO") BorrowTblVO brVO, @ModelAttribute("ReserveTblVO") ReserveTblVO rsVO, Model model) throws Exception
+                           @ModelAttribute("BorrowVO") BorrowTblVO brVO, @ModelAttribute("ReserveTblVO") ReserveTblVO rsVO,
+                           @RequestParam("isbn") String isbn, Model model) throws Exception
     {
+        ////////////////////////////////// API 구현부 ///////////////////////////////////
+        // 네이버 검색 API 요청
+		String clientId = "48nxdPZ14ojZRBfJ7zW7"; 		
+        String clientSecret = "tO37rq0RyH";
 
-        model.addAttribute("books", vo);
+        if ((isbn == null) || (isbn.length() ==0))
+        {
+            return  "book/booklist";
+        }
+        
+        //String apiURL = "https://openapi.naver.com/v1/search/blog?query=" + text;    // JSON 결과
+        URI uri = UriComponentsBuilder
+        		  .fromUriString("https://openapi.naver.com")
+        		  .path("/v1/search/book.json")
+        		  .queryParam("query", isbn)
+        		  .encode()
+        		  .build()
+        		  .toUri();
+        		  
+        // Spring에서 HTTP 요청을 나타내는 클래스 : RequestEntity 
+        RequestEntity<Void> req = RequestEntity
+        						 .get(uri)
+        						 .header("X-Naver-Client-Id", clientId)
+        						 .header("X-Naver-Client-Secret", clientSecret)
+        						 .build();
+
+        // Spring 제공 restTemplate
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> resp = restTemplate.exchange(req, String.class);
+        
+        // JSON 파싱 (Json 문자열을 객체로 만듦, 문서화)
+        ObjectMapper om = new ObjectMapper();
+        NaverResultVO resultVO = null;
+        
+        try {
+        	resultVO = om.readValue(resp.getBody(), NaverResultVO.class);
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+        
+        List<BookVO> books = resultVO.getItems();
+        if (books.size() > 0) {
+            BookVO book = books.get(0);
+            model.addAttribute("book", book);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////
 
         UserTblVO userTblVO = (UserTblVO)SessionUtil.getAttribute("USER");
 

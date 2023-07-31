@@ -102,12 +102,12 @@
                 <!-- 이미지 & 요약 -->
                 <div class="imageAndSummary">
                     <div class="image-container">
-                        <img src="${books.image}" alt="${books.title}" style="width:250px;">
+                        <img src="${book.image}" alt="${book.title}" style="width:250px;">
                         <!-- 이미지 -->
                     </div>
                     <div class="summary-container">
-                        <span id="summary-title">${books.title}</span><hr>
-                        <span class="summary-etc">저자 : ${books.author} | 출판사 : ${books.publisher} | 출간일 : ${books.pubdate}</span>
+                        <span id="summary-title">${book.title}</span><hr>
+                        <span class="summary-etc">저자 : ${book.author} | 출판사 : ${book.publisher} | 출간일 : ${book.pubdate}</span>
                         <!-- 요약 정보 --> <br><hr><br>
                         <span>대출 : ${brNum} / 5 | 예약 : ${rsNum} / 5</span>
                         <span></span>
@@ -143,7 +143,7 @@
 
             <div id="book_info" class="tab_body active">
                 <!-- 작품 소개 -->
-                <a>"${books.description}"</a>
+                <a>"${book.description}"</a>
             </div>
             <div id="book_table" class="tab_body">
                 <!-- 목차 -->
@@ -325,7 +325,7 @@
             return;
         }
 
-        if (confirm("${books.title}을(를) 대출하시겠습니까?"))
+        if (confirm("${book.title}을(를) 대출하시겠습니까?"))
         {
             let httpRequest = new XMLHttpRequest();
             httpRequest.open('POST', '/borrowBook', true);
@@ -343,14 +343,14 @@
     
                     if (result == "OK")
                     {
-                        btnBorrow.style.display = 'none';
-                        btnReserve.style.display = 'none';
-                        btnReturn.style.display = 'inline'
-
+                        
                         if(confirm("대출되었습니다. 마이페이지에서 확인하시겠습니까?"))
                         {
                             location.href = '/mypage';
+                            return;
                         }
+
+                        location.reload();
 
                     }
                     else if (result == "$MAX")
@@ -369,9 +369,9 @@
             }
     
             let requestData = {
-                brCode : '${books.isbn}' + "-" + "${vo.userId}",
-                isbn : '${books.isbn}',
-                title : '${books.title}',
+                brCode : '${book.isbn}' + "-" + "${vo.userId}",
+                isbn : '${book.isbn}',
+                title : '${book.title}',
                 userId : '${vo.userId}',
                 renew : "F"
             }
@@ -423,7 +423,7 @@
         }
 
         let requestData = {
-            isbn : '${books.isbn}',
+            isbn : '${book.isbn}',
             userId : '${vo.userId}',
         }
 
@@ -443,7 +443,7 @@
         // 예약 취소
         if (('${rsData}' != null) && ('${rsData}' != ""))
         {
-            if (confirm("${books.title}을(를) 예약취소 하시겠습니까?"))
+            if (confirm("${book.title}을(를) 예약취소 하시겠습니까?"))
             {
                 let httpRequest = new XMLHttpRequest();
                 httpRequest.open('POST', '/cancelReservation', true);
@@ -462,10 +462,7 @@
                         if (result === "OK")
                         {
                             alert("예약이 취소되었습니다. 감사합니다.");
-                            btnBorrow.style.display = 'none';
-                            btnReserve.style.display = 'inline';
-                            btnReserve.textContent = '예약하기';
-                            btnReturn.style.display = 'none'
+                            location.reload();
                         }
                         else
                         {
@@ -480,7 +477,7 @@
         
                 let requestData = {
                     userId : '${vo.userId}',
-                    isbn : '${books.isbn}'
+                    isbn : '${book.isbn}'
                 }
         
                 httpRequest.send(JSON.stringify(requestData));
@@ -489,7 +486,7 @@
         // 예약하기
         else
         {
-            if (confirm("${books.title}을(를) 예약하시겠습니까?"))
+            if (confirm("${book.title}을(를) 예약하시겠습니까?"))
             {
                 let httpRequest = new XMLHttpRequest();
                 httpRequest.open('POST', '/reserveBook', true);
@@ -507,15 +504,13 @@
         
                         if (result === "OK")
                         {
-                            btnBorrow.style.display = 'none';
-                            btnReserve.style.display = 'inline';
-                            btnReserve.textContent = '예약 취소';
-                            btnReturn.style.display = 'none'
-
                             if (confirm("예약되었습니다. 내 서재에서 확인하시겠습니까?"))
                             {
                                 location.href = '/main';
+                                return;
                             }
+
+                            location.reload();
                         }
                         else if (result === "$MAX")
                         {
@@ -533,9 +528,9 @@
                 }
         
                 let requestData = {
-                    brCode : '${books.isbn}' + '-' + '${vo.userId}',
+                    brCode : '${book.isbn}' + '-' + '${vo.userId}',
                     userId : '${vo.userId}',
-                    isbn : '${books.isbn}'
+                    isbn : '${book.isbn}'
                 }
         
                 httpRequest.send(JSON.stringify(requestData));
@@ -569,7 +564,7 @@
                 if (result === "OK")
                 {
                     alert("한줄평을 등록하였습니다.");
-                    location.href = "/book/bookinfo?title=${books.title}&isbn=${books.isbn}&image=${books.image}&author=${books.author}&publisher=${books.publisher}&pubdate=${books.pubdate}&description=${books.description}";
+                    location.href = "/book/bookinfo?isbn=${book.isbn}";
                 }
                 else if (result === "$EXIST")
                 {
@@ -591,7 +586,7 @@
         let requestData = {
             userId : '${vo.userId}',
             review : txtReview.value,
-            isbn : '${books.isbn}'
+            isbn : '${book.isbn}'
         }
 
 
