@@ -33,44 +33,6 @@
       
         <!-- Template Main CSS File -->
         <link href="assets/css/main.css" rel="stylesheet">
-        <style>
-          li {
-            list-style: none;
-          }
-          #newBookList, #bestBookList {
-            display: flex;
-            justify-content: space-between;
-          }
-          #newBookList li, #bestBookList li {
-            width: 120px;
-          }
-          #newBookList li a, #bestBookList li a {
-            display: block;
-            width: 100%;
-          }
-          #newBookList li a img, #bestBookList li a img {
-            width: 120px;
-            height: 160px;
-          }
-          #bookTitle {
-            display: block;
-            padding-top: 10px;
-            color: #2f2f2f;
-            overflow: hidden;  		
-            text-overflow: ellipsis;  	
-            white-space: nowrap; 
-          }
-          #bookAuthor {
-            display: block;
-            color: #8d8d8d;
-            overflow: hidden;  		
-            text-overflow: ellipsis;  	
-            white-space: nowrap; 
-          }
-          #bestBookList {
-            display: none;
-          }
-        </style>
       
         <!-- =======================================================
         * Template Name: Append
@@ -189,129 +151,7 @@
             </div>
       
           </section><!-- End Clients Section -->
-
-          <!-- Portfolio Section - Home Page -->
-          <section id="portfolio" class="portfolio">
       
-            <div class="container">
-      
-                <ul id="bookType">
-                  <li id="newBook"><a href="#portFolio">신간 도서</a></li>
-                  <li id="bestBook"><a href="#portFolio">베스트 도서</a></li>
-                </ul>
-      
-                <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
-      
-                  <ul id="newBookList">
-                    <li>
-                        <a href="#">
-                          <img src="https://shopping-phinf.pstatic.net/main_4054675/40546756725.20230801122843.jpg" alt="8월의 빛">
-                        </a>
-                        <span id="bookTitle">8월의 빛</span>
-                        <span id="bookAuthor">박시하</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4054675/40546756725.20230801122843.jpg" alt="8월의 빛">
-                      </a>
-                      <span id="bookTitle">8월의 빛</span>
-                      <span id="bookAuthor">박시하</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4054675/40546756725.20230801122843.jpg" alt="8월의 빛">
-                      </a>
-                      <span id="bookTitle">8월의 빛</span>
-                      <span id="bookAuthor">박시하</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4054675/40546756725.20230801122843.jpg" alt="8월의 빛">
-                      </a>
-                      <span id="bookTitle">8월의 빛</span>
-                      <span id="bookAuthor">박시하</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4054675/40546756725.20230801122843.jpg" alt="8월의 빛">
-                      </a>
-                      <span id="bookTitle">8월의 빛</span>
-                      <span id="bookAuthor">박시하</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4054675/40546756725.20230801122843.jpg" alt="8월의 빛">
-                      </a>
-                      <span id="bookTitle">8월의 빛</span>
-                      <span id="bookAuthor">박시하</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4054675/40546756725.20230801122843.jpg" alt="8월의 빛">
-                      </a>
-                      <span id="bookTitle">8월의 빛</span>
-                      <span id="bookAuthor">박시하</span>
-                    </li>
-                  </ul>
-
-                  <ul id="bestBookList">
-                    <li>
-                        <a href="#">
-                          <img src="https://shopping-phinf.pstatic.net/main_4044377/40443770625.20230725122152.jpg" alt="화가가 사랑한 바다">
-                        </a>
-                        <span id="bookTitle">화가가 사랑한 바다</span>
-                        <span id="bookAuthor">정우철</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4044377/40443770625.20230725122152.jpg" alt="화가가 사랑한 바다">
-                      </a>
-                      <span id="bookTitle">화가가 사랑한 바다</span>
-                      <span id="bookAuthor">정우철</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4044377/40443770625.20230725122152.jpg" alt="화가가 사랑한 바다">
-                      </a>
-                      <span id="bookTitle">화가가 사랑한 바다</span>
-                      <span id="bookAuthor">정우철</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4044377/40443770625.20230725122152.jpg" alt="화가가 사랑한 바다">
-                      </a>
-                      <span id="bookTitle">화가가 사랑한 바다</span>
-                      <span id="bookAuthor">정우철</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4044377/40443770625.20230725122152.jpg" alt="화가가 사랑한 바다">
-                      </a>
-                      <span id="bookTitle">화가가 사랑한 바다</span>
-                      <span id="bookAuthor">정우철</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4044377/40443770625.20230725122152.jpg" alt="화가가 사랑한 바다">
-                      </a>
-                      <span id="bookTitle">화가가 사랑한 바다</span>
-                      <span id="bookAuthor">정우철</span>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="https://shopping-phinf.pstatic.net/main_4044377/40443770625.20230725122152.jpg" alt="화가가 사랑한 바다">
-                      </a>
-                      <span id="bookTitle">화가가 사랑한 바다</span>
-                      <span id="bookAuthor">정우철</span>
-                    </li>
-                  </ul>
-      
-                </div><!-- End Portfolio Container -->
-      
-            </div>
-      
-          </section><!-- End Portfolio Section -->    
-
           <!-- About Section - Home Page -->
           <section id="about" class="about">
       
@@ -538,6 +378,126 @@
             </div>
       
           </section><!-- End Features Section -->
+      
+          <!-- Portfolio Section - Home Page -->
+          <section id="portfolio" class="portfolio">
+      
+            <!--  Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+              <h2>Portfolio</h2>
+              <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+            </div><!-- End Section Title -->
+      
+            <div class="container">
+      
+              <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+      
+                <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
+                  <li data-filter="*" class="filter-active">All</li>
+                  <li data-filter=".filter-app">App</li>
+                  <li data-filter=".filter-product">Card</li>
+                  <li data-filter=".filter-branding">Web</li>
+                </ul><!-- End Portfolio Filters -->
+      
+                <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+      
+                  <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+                    <img src="assets/img/masonry-portfolio/masonry-portfolio-1.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                      <h4>App 1</h4>
+                      <p>Lorem ipsum, dolor sit</p>
+                      <a href="assets/img/masonry-portfolio/masonry-portfolio-1.jpg" title="App 1" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                      <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                    </div>
+                  </div><!-- End Portfolio Item -->
+      
+                  <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
+                    <img src="assets/img/masonry-portfolio/masonry-portfolio-2.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                      <h4>Product 1</h4>
+                      <p>Lorem ipsum, dolor sit</p>
+                      <a href="assets/img/masonry-portfolio/masonry-portfolio-2.jpg" title="Product 1" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                      <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                    </div>
+                  </div><!-- End Portfolio Item -->
+      
+                  <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
+                    <img src="assets/img/masonry-portfolio/masonry-portfolio-3.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                      <h4>Branding 1</h4>
+                      <p>Lorem ipsum, dolor sit</p>
+                      <a href="assets/img/masonry-portfolio/masonry-portfolio-3.jpg" title="Branding 1" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                      <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                    </div>
+                  </div><!-- End Portfolio Item -->
+      
+                  <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+                    <img src="assets/img/masonry-portfolio/masonry-portfolio-4.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                      <h4>App 2</h4>
+                      <p>Lorem ipsum, dolor sit</p>
+                      <a href="assets/img/masonry-portfolio/masonry-portfolio-4.jpg" title="App 2" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                      <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                    </div>
+                  </div><!-- End Portfolio Item -->
+      
+                  <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
+                    <img src="assets/img/masonry-portfolio/masonry-portfolio-5.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                      <h4>Product 2</h4>
+                      <p>Lorem ipsum, dolor sit</p>
+                      <a href="assets/img/masonry-portfolio/masonry-portfolio-5.jpg" title="Product 2" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                      <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                    </div>
+                  </div><!-- End Portfolio Item -->
+      
+                  <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
+                    <img src="assets/img/masonry-portfolio/masonry-portfolio-6.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                      <h4>Branding 2</h4>
+                      <p>Lorem ipsum, dolor sit</p>
+                      <a href="assets/img/masonry-portfolio/masonry-portfolio-6.jpg" title="Branding 2" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                      <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                    </div>
+                  </div><!-- End Portfolio Item -->
+      
+                  <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
+                    <img src="assets/img/masonry-portfolio/masonry-portfolio-7.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                      <h4>App 3</h4>
+                      <p>Lorem ipsum, dolor sit</p>
+                      <a href="assets/img/masonry-portfolio/masonry-portfolio-7.jpg" title="App 3" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                      <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                    </div>
+                  </div><!-- End Portfolio Item -->
+      
+                  <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
+                    <img src="assets/img/masonry-portfolio/masonry-portfolio-8.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                      <h4>Product 3</h4>
+                      <p>Lorem ipsum, dolor sit</p>
+                      <a href="assets/img/masonry-portfolio/masonry-portfolio-8.jpg" title="Product 3" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                      <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                    </div>
+                  </div><!-- End Portfolio Item -->
+      
+                  <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
+                    <img src="assets/img/masonry-portfolio/masonry-portfolio-9.jpg" class="img-fluid" alt="">
+                    <div class="portfolio-info">
+                      <h4>Branding 3</h4>
+                      <p>Lorem ipsum, dolor sit</p>
+                      <a href="assets/img/masonry-portfolio/masonry-portfolio-9.jpg" title="Branding 2" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                      <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+                    </div>
+                  </div><!-- End Portfolio Item -->
+      
+                </div><!-- End Portfolio Container -->
+      
+              </div>
+      
+            </div>
+      
+          </section><!-- End Portfolio Section -->
       
           <!-- Pricing Section - Home Page -->
           <section id="pricing" class="pricing">
@@ -1252,24 +1212,5 @@
         <!-- 부트스트랩 src -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
       
-        <script src="/JS/jquery-3.7.0.min.js"></script>
-        <script>
-        (()=>{   
-            const newBook = document.querySelector('#newBook');
-            const newBookList = document.querySelector('#newBookList');
-            const bestBook = document.querySelector('#bestBook');
-            const bestBookList = document.querySelector('#bestBookList');
-    
-            newBook.addEventListener('click', ()=>{
-              newBookList.style.display = "flex";
-              bestBookList.style.display = "none";
-            });
-
-            bestBook.addEventListener('click', ()=>{
-              newBookList.style.display = "none";
-              bestBookList.style.display = "flex";
-            });
-        })(); 
-        </script>
       </body>
 </html>
