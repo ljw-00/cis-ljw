@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace : 해당 mapper를 사용하는 DAO 정보 입력 -->
+<mapper namespace="com.example.demo.user.UserDAO">
+
+    <resultMap type="com.example.demo.user.UserTblVO" id="userMap">
+        <result property="userId"       column="USERID" />
+        <result property="userPw"       column="USERPW" />
+        <result property="name"         column="NAME" />
+        <result property="email"        column="EMAIL" />
+        <result property="address"      column="ADDRESS" />
+        <result property="phoneNumber"  column="PHONENUMBER" />
+        <result property="birthDate"    column="BIRTHDATE" />
+    </resultMap>
+
+    <!-- id에 해당하는 쿼리를 날렸을 때 userMap에 가서 매핑하라는 정보 -->
+    <select id="selectOneUser" resultMap="userMap">
+        SELECT * FROM USER_TBL WHERE USERID=#{userId} 
+        <if test="userPw != null and userPw != ''">
+        AND USERPW=#{userPw}
+        </if>
+    </select>
+
+    <!-- 회원가입 -->
+    <insert id="insertOneUser">
+        INSERT INTO USER_TBL (USERID, USERPW, NAME, EMAIL, ADDRESS, PHONENUMBER, BIRTHDATE) 
+        VALUES(#{userId}, #{userPw}, #{name}, #{email}, #{address}, #{phoneNumber}, #{birthDate})
+    </insert>
+
+    <!-- 아이디 찾기 -->
+    <select id="selectOneId" resultMap="userMap">
+        SELECT * FROM USER_TBL WHERE EMAIL = #{email}
+    </select>
+
+    <!-- 비밀번호 찾기 -->
+    <select id="selectOnePw" resultMap="userMap">
+        SELECT * FROM USER_TBL WHERE USERID = #{userId}
+    </select>
+    
+</mapper>
