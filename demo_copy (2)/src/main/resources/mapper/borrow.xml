@@ -19,7 +19,7 @@
 
     <insert id="insertOneBorrow">
         INSERT INTO BORROW_TBL(BRCODE, ISBN, TITLE, USERID, BRDATE, DUEDATE, RENEW) VALUES
-        (#{brCode}, #{isbn}, #{title}, #{userId}, SYSDATE, (SYSDATE + 10), #{renew})
+        (#{brCode}, #{isbn}, #{title}, #{userId}, SYSDATE, (SYSDATE + INTERVAL '1' MINUTE), #{renew})
     </insert>
 
     <select id="checkBorrowUser" resultMap="borrowMap">

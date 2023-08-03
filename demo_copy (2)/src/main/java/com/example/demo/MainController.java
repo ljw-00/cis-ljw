@@ -229,5 +229,22 @@ public class MainController {
         return "mypage";
     }
 
+    // ///////////////////////////
+    @GetMapping("/test")
+    public String test()
+    {
+        return "test";
+    }
+
+    @PostMapping("/test")
+    @ResponseBody
+    public int test(@ModelAttribute("UserTblVO") UserTblVO vo, Model model) throws Exception
+    {
+        System.out.println(vo);
+        int requestNum = 5;
+        model.addAttribute("rsNum", requestNum);
+        return requestNum;
+    }
+
     
 }

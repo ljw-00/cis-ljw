@@ -163,7 +163,8 @@
                 {
                     if (xhr.responseText === 'OK')
                     {
-                        location.href = '/index';
+                        // 뒤로가기 후 새로고침
+                        location.href = document.referrer;
                     } 
                     else 
                     {

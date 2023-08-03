@@ -96,14 +96,14 @@
                 <tr>
                     <td>
                         <div id="thumbnail">
-                            <a href="/book/bookinfo?isbn=${book.isbn}">
+                            <a href="/bookinfo?isbn=${book.isbn}">
                                 <img src="${book.image}" alt="${book.title}" style="width:100px;">
                             </a>
                         </div>
                         <div id="list-body">
                             <div id="flexbox">
                                 <!-- 책제목 -->
-                                <a href="/book/bookinfo?isbn=${book.isbn}" id="title">${book.title}</a>
+                                <a href="/bookinfo?isbn=${book.isbn}" id="title">${book.title}</a>
                                 <!-- 작가, 출판사, 출간일 -->
                                 <div id="app">
                                     <span>${book.author}</span>
